@@ -308,11 +308,12 @@ Languages:
                            .get("viewer", {})
                            .get("repositories", {}))
             
-            repos = owned_repos.get("nodes", [])
+            repos = [r for r in (owned_repos.get("nodes") or []) if r]
+            contrib_nodes = [r for r in (contrib_repos.get("nodes") or []) if r]
             if self._consider_forked_repos:
-                repos += contrib_repos.get("nodes", [])
+                repos += contrib_nodes
             else:
-                for repo in contrib_repos.get("nodes", []):
+                for repo in contrib_nodes:
                     name = repo.get("nameWithOwner")
                     if name in self._ignored_repos or name in self._exclude_repos:
                         continue
